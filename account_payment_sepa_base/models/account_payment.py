@@ -79,6 +79,18 @@ class AccountPayment(models.Model):
             purpose = objectify.SubElement(parent_node, "Purp")
             purpose.Cd = payment_line.purpose
 
+    # Implement in a submodule
+
+    def _get_instruction_for_creditor_agent_information(self):
+        self.ensure_one()
+        return False
+
+    def _generate_instruction_for_creditor_agent(self, parent_node):
+        instr_information = self._get_instruction_for_creditor_agent_information()
+        if instr_information:
+            instruction = objectify.SubElement(parent_node, "InstrForCdtrAgt")
+            instruction.InstrInf = instr_information
+
     def _generate_regulatory_reporting(self, parent_node, gen_args):
         self.ensure_one()
         order_obj = self.env["account.payment.order"]

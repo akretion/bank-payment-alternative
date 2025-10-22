@@ -94,6 +94,7 @@ class AccountPaymentOrder(models.Model):
                     gen_args,
                     payment,
                 )
+                payment._generate_instruction_for_creditor_agent(trf_transaction_info)
                 payment._generate_purpose(trf_transaction_info)
                 payment._generate_regulatory_reporting(trf_transaction_info, gen_args)
                 payment._generate_remittance_info_block(trf_transaction_info, gen_args)
