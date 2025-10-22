@@ -8,7 +8,7 @@
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/bank-payment-alternative",
     "category": "Banking addons",
-    "depends": ["account_invoice_select_for_payment", "account_payment_order"],
+    "depends": ["account_invoice_select_for_payment", "account_payment_batch_oca"],
     "data": [
         "wizard/account_payment_line_create_view.xml",
         "views/account_payment_method_line.xml",

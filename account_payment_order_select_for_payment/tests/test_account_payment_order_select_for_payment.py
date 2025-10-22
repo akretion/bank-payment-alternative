@@ -96,5 +96,5 @@ class TestPaymentOrderSelectForPayment(AccountTestInvoicingCommon):
 
         wizard.select_for_payment_filter = False
         wizard.populate()
-        self.assertNotIn(self.topay_line, wizard.move_line_ids)
+        self.assertIn(self.topay_line, wizard.move_line_ids)
         self.assertIn(self.not_topay_line, wizard.move_line_ids)

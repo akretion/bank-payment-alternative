@@ -33,6 +33,6 @@ class AccountPaymentLineCreate(models.TransientModel):
             res += [("move_id.selected_for_payment", "=", True)]
         return res
 
-    @api.onchange("select_for_payment_filter")
-    def move_line_change_select_for_payment_filter(self):
-        self.move_line_filters_change()
+    @api.depends("select_for_payment_filter")
+    def _compute_eligible_move_line_ids(self):
+        return super()._compute_eligible_move_line_ids()
