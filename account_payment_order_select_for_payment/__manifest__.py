@@ -3,7 +3,7 @@
 
 {
     "name": "Account Payment Order Validation on move line",
-    "version": "14.0.0.1.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/bank-payment-alternative",
@@ -11,8 +11,8 @@
     "depends": ["account_invoice_select_for_payment", "account_payment_order"],
     "data": [
         "wizard/account_payment_line_create_view.xml",
-        "views/account_payment_mode.xml",
+        "views/account_payment_method_line.xml",
     ],
-    "development_status": "Alpha",
+    "development_status": "Beta",
     "installable": True,
 }

@@ -1,4 +1,4 @@
-On each payment mode it s possible to choose if we want to select bt
+On each payment method line it s possible to choose if we want to select bt
 default only the to pay invoice on payment order.
 
 Once it's done, for the vendor bill and the customer credit note, it's
