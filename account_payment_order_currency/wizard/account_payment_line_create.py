@@ -28,7 +28,6 @@ class AccountPaymentLineCreate(models.TransientModel):
         return res
 
     def _prepare_move_line_domain(self):
-
         res = super()._prepare_move_line_domain()
         if self.currency_ids:
             res += [("currency_id", "in", self.currency_ids.ids)]

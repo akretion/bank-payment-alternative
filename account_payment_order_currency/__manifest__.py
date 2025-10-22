@@ -6,7 +6,7 @@
     "version": "14.0.0.1.0",
     "license": "AGPL-3",
     "author": "Akretion, Odoo Community Association (OCA)",
-    "website": "https://github.com/OCA/bank-payment",
+    "website": "https://github.com/OCA/bank-payment-alternative",
     "category": "Banking addons",
     "depends": ["account_payment_order"],
     "data": [

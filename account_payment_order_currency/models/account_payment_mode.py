@@ -9,7 +9,6 @@ from odoo import fields, models
 
 
 class AccountPaymentMode(models.Model):
-
     _inherit = "account.payment.mode"
 
     default_currency_ids = fields.Many2many(
