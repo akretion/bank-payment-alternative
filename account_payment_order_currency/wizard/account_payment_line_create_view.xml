@@ -5,7 +5,7 @@
         <field name="model">account.payment.line.create</field>
         <field
             name="inherit_id"
-            ref="account_payment_order.account_payment_line_create_form"
+            ref="account_payment_batch_oca.account_payment_line_create_form"
         />
         <field name="arch" type="xml">
             <field name="payment_mode" position="after">

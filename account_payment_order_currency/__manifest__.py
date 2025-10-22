@@ -3,15 +3,15 @@
 
 {
     "name": "Account Payment Order currency",
-    "version": "14.0.0.1.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/bank-payment-alternative",
     "category": "Banking addons",
-    "depends": ["account_payment_order"],
+    "depends": ["account_payment_batch_oca"],
     "data": [
         "wizard/account_payment_line_create_view.xml",
-        "views/account_payment_mode.xml",
+        "views/account_payment_method_line.xml",
     ],
     "installable": True,
 }

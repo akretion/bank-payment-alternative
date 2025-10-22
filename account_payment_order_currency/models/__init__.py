@@ -1,1 +1,1 @@
-from . import account_payment_mode
+from . import account_payment_method_line

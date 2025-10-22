@@ -1,7 +1,7 @@
-On each payment mode it s possible to choose if we want to select by
+On each payment method line it s possible to choose if we want to select by
 default some currencies.
 
-In the payment order, when we choose a payment mode, it will have in the
+In the payment order, when we choose a payment method line, it will have in the
 payment order the default currencies but it's possible to add some
 others.
 
