@@ -8,7 +8,6 @@ from odoo import fields, models
 
 
 class AccountPaymentMode(models.Model):
-
     _inherit = "account.payment.mode"
 
     default_selected_for_payment = fields.Boolean(string="To Pay Filter")
