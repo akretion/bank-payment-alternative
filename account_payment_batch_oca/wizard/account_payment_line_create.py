@@ -76,7 +76,8 @@ class AccountPaymentLineCreate(models.TransientModel):
         domain = [
             ("reconciled", "=", False),
             ("company_id", "=", self.order_id.company_id.id),
-            ("move_id.payment_state", "in", ("not_paid", "partial")),
+            # Take False payment_state to be able to pay som misc entries
+            ("move_id.payment_state", "in", ("not_paid", "partial", False)),
         ]
         if self.journal_ids:
             domain += [("journal_id", "in", self.journal_ids.ids)]
