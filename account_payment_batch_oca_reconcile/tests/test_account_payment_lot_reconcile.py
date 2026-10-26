@@ -237,3 +237,32 @@ class TestReconciliationWidget(AccountTestInvoicingCommon):
         bank_stmt_line.reconcile_bank_line()
         self.assertEqual(invoice.payment_state, "paid")
         self.assertEqual(invoice2.payment_state, "paid")
+
+    def test_rejection_wizard_manual_partner(self):
+        invoice = self.create_invoice_order(self.inbound_order, self.partner)
+        self.inbound_order.draft2open()
+        self.inbound_order.open2generated()
+        self.inbound_order.generated2uploaded()
+        payment = self.inbound_order.payment_ids
+        self.assertEqual(len(payment), 1)
+        # The bank reports the rejection without partner nor payment reference
+        st_line = self.stmt_line_model.create(
+            {
+                "payment_ref": "RETURNED DIRECT DEBIT",
+                "journal_id": self.bank_journal.id,
+                "amount": -invoice.amount_total,
+                "date": fields.Date.today(),
+            }
+        )
+        with Form(
+            self.env["account.payment.reconcile.rejection"].with_context(
+                active_model="account.bank.statement.line", active_id=st_line.id
+            )
+        ) as wiz:
+            self.assertEqual(wiz.match_method, "no_partner_no_match")
+            self.assertFalse(wiz.payment_id)
+            wiz.partner_id = self.partner
+            # The partner selected manually is kept and used for the search
+            self.assertEqual(wiz.partner_id, self.partner)
+            self.assertEqual(wiz.payment_id, payment)
+            self.assertEqual(wiz.match_method, "partner_last")
