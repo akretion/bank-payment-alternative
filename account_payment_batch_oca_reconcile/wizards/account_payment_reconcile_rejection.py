@@ -65,7 +65,7 @@ class AccountPaymentReconcileRejection(models.TransientModel):
     )
     partner_id = fields.Many2one(
         "res.partner",
-        compute="_compute_payment_id",
+        compute="_compute_partner_id",
         store=True,
         precompute=True,
         readonly=False,
@@ -104,17 +104,26 @@ class AccountPaymentReconcileRejection(models.TransientModel):
         res["statement_line_id"] = statement_line_id
         return res
 
+    @api.depends("statement_line_id")
+    def _compute_partner_id(self):
+        for wiz in self:
+            partner_id = False
+            if wiz.statement_line_id:
+                partner_id = wiz.statement_line_id._get_rejection_info()[2]
+            wiz.partner_id = partner_id
+
     @api.depends("statement_line_id", "partner_id")
     def _compute_payment_id(self):
+        # The partner has its own compute: a partner selected manually in the
+        # wizard is kept, and the origin payment is searched with it
         for wiz in self:
-            payment_type = payment_id = partner_id = match_method = False
+            payment_type = payment_id = match_method = False
             if wiz.statement_line_id:
-                payment_type, payment_id, partner_id, match_method = (
-                    wiz.statement_line_id._get_rejection_info()
+                payment_type, payment_id, _partner_id, match_method = (
+                    wiz.statement_line_id._get_rejection_info(partner=wiz.partner_id)
                 )
             wiz.payment_type = payment_type
             wiz.payment_id = payment_id
-            wiz.partner_id = partner_id
             wiz.match_method = match_method
 
     def run(self):

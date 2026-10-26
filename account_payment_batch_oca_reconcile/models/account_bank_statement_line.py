@@ -143,8 +143,15 @@ class AccountBankStatementLine(models.Model):
             return super().add_multiple_lines(domain)
 
     # for rejection wizard
-    def _get_rejection_info(self):
+    def _get_rejection_info(self, partner=None):
+        """Return (payment_type, payment_id, partner_id, match_method).
+
+        :param partner: partner selected in the rejection wizard; when given, it
+            replaces the partner of the bank statement line for the search of
+            the origin payment by partner.
+        """
         self.ensure_one()
+        partner = partner or self.partner_id
         fc = self.currency_id.compare_amounts(self.amount, 0)
         if fc > 0:
             payment_type = "outbound"
@@ -212,9 +219,9 @@ class AccountBankStatementLine(models.Model):
         if payment:
             match_method = "endtoend_id"
             partner_id = payment.partner_id.id
-        elif self.partner_id:
+        elif partner:
             additional_pay_domain = [
-                ("partner_id", "=", self.partner_id.id),
+                ("partner_id", "=", partner.id),
                 ("memo", "!=", False),
                 ("amount", "<=", self.rejected_payment_max_amount),
                 ("amount", ">=", self.rejected_payment_min_amount),
@@ -223,7 +230,7 @@ class AccountBankStatementLine(models.Model):
                 payment_domain + additional_pay_domain, order="date desc"
             )
             payment, match_method = self._rejection_filter_payment_by_amount(payments)
-            partner_id = self.partner_id.id
+            partner_id = partner.id
         else:
             match_method = "no_partner_no_match"
 
