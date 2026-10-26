@@ -178,7 +178,7 @@ class AccountBankStatementLine(models.Model):
             _logger.info("Working on sequence ID %s with code %s", seq.id, seq.code)
             prefix = re.escape(seq.prefix)
             padding = seq.padding
-            pattern = f"{prefix}\d{{{padding},{padding + 1}}}/LOT\d{{1,2}}/\d{{1,5}}"
+            pattern = rf"{prefix}\d{{{padding},{padding + 1}}}/LOT\d{{1,2}}/\d{{1,5}}"
             res_find = re.findall(pattern, self.payment_ref)
             _logger.debug("res_find=%s", res_find)
             if res_find:
