@@ -8,9 +8,20 @@ from odoo.fields import first
 
 @openupgrade.migrate()
 def migrate(env, version):
+    # payment_order_ok was on the payment method in v16, but with the opposite
+    # meaning ("only for payment orders"). The field which said if a payment
+    # mode can be used in a payment order was on the payment mode: a payment
+    # method is usable in payment orders if at least one of its payment modes
+    # was.
     env.cr.execute("""
-        UPDATE account_payment_method
-        SET payment_order_ok = payment_order_only
+        UPDATE account_payment_method apm
+        SET payment_order_ok = TRUE
+        WHERE EXISTS (
+            SELECT 1
+            FROM account_payment_mode apm_v16
+            WHERE apm_v16.payment_method_id = apm.id
+              AND apm_v16.payment_order_ok
+        )
     """)
     env.cr.execute("""
         UPDATE account_payment_method_line
@@ -26,9 +37,16 @@ def migrate(env, version):
         WHERE account_payment_method_line.old_payment_mode_id IS NOT NULL
         AND apm.id = account_payment_method_line.old_payment_mode_id
     """)
+    # the lines which don't replace a payment mode are not selectable on
+    # partners/invoices, so they can't be selected on a payment order either
+    env.cr.execute("""
+        UPDATE account_payment_method_line
+        SET payment_order_ok = FALSE
+        WHERE selectable IS NOT TRUE
+    """)
     # manage default_journal_ids
-    # remove default computed values
-    env.cr.execute("DELETE FROM account_journal_account_payment_mode_rel")
+    # remove default computed values of the new method lines
+    env.cr.execute("DELETE FROM account_journal_account_payment_method_line_rel")
     # fill from old payment mode table
     env.cr.execute("""
         INSERT INTO account_journal_account_payment_method_line_rel
