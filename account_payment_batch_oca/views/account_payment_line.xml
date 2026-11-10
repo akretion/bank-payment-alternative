@@ -110,6 +110,7 @@
                     sum="Total in Company Currency"
                     column_invisible="1"
                 />
+                <field name="company_currency_id" column_invisible="1" />
                 <field name="payment_type" column_invisible="1" />
                 <field name="currency_id" column_invisible="1" />
             </list>
